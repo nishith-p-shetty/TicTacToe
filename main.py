@@ -1,69 +1,81 @@
-#!/usr/local/bin/python3.10
-
 import os
 
-def show_board():
-  os.system('clear')
-  for i in range(0,9,3):
-    print("       -------------")
-    print("       | {} | {} | {} |".format(display[i], display[i+1], display[i+2]))
-  print("       -------------")
+def inputPlayers():
+    p1 = input("Name of Player 1 [X]: ")
+    p2 = input("Name of Player 2 [O]: ")
+    if (p1.strip() == '' or p2.strip() == ''):
+        os.system('clear')
+        p1,p2 = inputPlayers()
+    return p1,p2
 
-def ip_pos():
-    global turn
-    pos = int(input("Select Position {}: ".format(p1+" (X)" if turn else p2+" (O)")))
-    if(pos >= 1 and pos <= 9 and pos not in pos_c):
-      pos_c.append(pos)
-      return pos
+def inputPosition(p,ch):
+    print(p,' [',ch,'] ',end='')
+    pos = input(' : Enter Your Position: ')
+    pos.strip()
+    pos = int(pos)
+    if (pos.strip() == ''):
+        pos = inputPosition(p,ch)
+    if (pos >= 1 and pos <=9 and pos not in e):
+        e.append(pos)
+        return pos
     else:
-      print('Invalid Input:')
-      return ip_pos()
+        print('Invalid Input')
+        return inputPosition(p,ch)
 
-def pattern(c):
-  if(display[0]==display[1]==display[2]==c  or display[4-1]==display[5-1]==display[6-1]==c or display[7-1]==display[8-1]==display[9-1]==c or display[1-1]==display[4-1]==display[7-1]==c or display[2-1]==display[5-1]==display[8-1]==c or display[3-1]==display[6-1]==display[9-1]==c or display[1-1]==display[5-1]==display[9-1]==c or display[3-1]==display[5-1]==display[7-1]==c):
-    return True
-  return False
-  
-def w_d():
-  if pattern('X'):
-    print(p1,'Wins!!!')
-    return False
-  
-  elif pattern('O'):
-    print(p2,'Wins!!!')
-    return False
-  else:
-    return True
-
-def game():
-  global turn, p1, p2, pos_c, display
-  display = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-  p1 = input("Name of Player 1 (X): ")
-  p2 = input("Name of Player 2 (O): ")
-
-  for r in range(9):
-      show_board()
-      if(w_d() == True):
-        pos = ip_pos()
-        if(turn):
-          display[pos-1] = "X"
-          turn = False
-        else:
-          display[pos-1] = "O"
-          turn = True
-        if(r == 8):
-          show_board()
-          print("Out of Turns...!!!")
-
-if __name__ == "__main__":
-  pos_c = []
-  turn = True
-  p1,p2 = '',''
-  display = []
-  game()
-  while(True):
-    turn = True
-    pos_c.clear()
-    ta = input('Do you want to try again y/n : ')
+def printBoard():
     os.system('clear')
-    game() if ta=='y' else exit()
+    for i in range(1,10,3):
+        print("-------------")
+        print("| {} | {} | {} |".format(d[i],d[i+1],d[i+2]))
+    print("-------------")
+
+
+def patternCheck(c):
+    if(d[1] == d[2] == d[3] == c or
+       d[4] == d[5] == d[6] == c or
+       d[7] == d[8] == d[9] == c or
+       d[1] == d[4] == d[7] == c or
+       d[2] == d[5] == d[8] == c or
+       d[3] == d[6] == d[9] == c or
+       d[1] == d[5] == d[9] == c or
+       d[3] == d[5] == d[7] == c ):
+        return True
+    return False
+
+def turner():
+    global turn
+    if turn == 1:
+        return p1
+    else:
+        return p2
+def turner2():
+    global turn
+    if turn == 1:
+        return 'X'
+    else:
+        return 'O'
+def game():
+    global turn
+    for r in range(1,10):
+        printBoard()
+        pos = inputPosition(turner(),turner2())
+        d[pos] = turner2() 
+        if patternCheck(turner2()):
+            printBoard()
+            print('Congradulations: ',turner())
+            return 0
+        turn*=-1
+        printBoard()
+    print("Out of turns: Draw")
+
+
+os.system('clear')
+p1,p2 = inputPlayers()
+while True:
+    e = []
+    d = [0,1,2,3,4,5,6,7,8,9]
+    print(e)
+    turn = 1
+    game()
+    if input('Do you want to play again y/n : ') == 'n':
+        exit()
