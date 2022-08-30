@@ -8,13 +8,17 @@ def inputPlayers():
         p1,p2 = inputPlayers()
     return p1,p2
 
+def ipPos(p, ch):
+  pos = input(p + " : Enter Your Position (" + ch + "): ")
+  pos = pos.strip()
+  return pos
+
 def inputPosition(p,ch):
-    print(p,' [',ch,'] ',end='')
-    pos = input(' : Enter Your Position: ')
-    pos.strip()
+    pos = ipPos(p,ch)
+    while(pos == '' or pos.isdigit() == False):
+      print('Invalid Input')
+      pos = ipPos(p,ch)
     pos = int(pos)
-    if (pos.strip() == ''):
-        pos = inputPosition(p,ch)
     if (pos >= 1 and pos <=9 and pos not in e):
         e.append(pos)
         return pos
@@ -32,13 +36,13 @@ def printBoard():
 
 def patternCheck(c):
     if(d[1] == d[2] == d[3] == c or
-       d[4] == d[5] == d[6] == c or
-       d[7] == d[8] == d[9] == c or
-       d[1] == d[4] == d[7] == c or
-       d[2] == d[5] == d[8] == c or
-       d[3] == d[6] == d[9] == c or
-       d[1] == d[5] == d[9] == c or
-       d[3] == d[5] == d[7] == c ):
+      d[4] == d[5] == d[6] == c or
+      d[7] == d[8] == d[9] == c or
+      d[1] == d[4] == d[7] == c or
+      d[2] == d[5] == d[8] == c or
+      d[3] == d[6] == d[9] == c or
+      d[1] == d[5] == d[9] == c or
+      d[3] == d[5] == d[7] == c ):
         return True
     return False
 
