@@ -1,3 +1,4 @@
+import sys
 import os
 
 def inputPlayers():
@@ -82,4 +83,4 @@ while True:
     turn = 1
     game()
     if input('Do you want to play again y/n : ') == 'n':
-        exit()
+        sys.exit(0)
